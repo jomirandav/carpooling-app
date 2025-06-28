@@ -1,8 +1,11 @@
 services:
-  db:
+  app:
     build:
       context: .
-      dockerfile: ./database/Dockerfile
+      dockerfile: ./app/Dockerfile
+    container_name: cp-fastapi
+  db:
+    image: postgres:17.5
     container_name: cp-postgres
     environment:
       POSTGRES_USER: postgres
@@ -10,3 +13,8 @@ services:
       POSTGRES_DB: cp_database
     ports:
       - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d
+volumes:
+  pgdata:
